@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.ui.Model;
 import java.util.List;
 
 @Controller
@@ -14,9 +15,6 @@ public class MovieController {
     public static List<Movie> getMovies(String route) {
         RestTemplate restTemplate = new RestTemplate();
         Results movies = restTemplate.getForObject(route, Results.class);
-        System.out.println("\n******\n");
-        System.out.println(movies.getResults());
-        System.out.println("\n******\n");
         return movies.getResults();
     }
 
@@ -26,8 +24,8 @@ public class MovieController {
     }
 
     @RequestMapping(path = "/now-playing", method = RequestMethod.GET)
-        public String nowPlaying () {
-        System.out.println(getMovies(API_URL));
+        public String nowPlaying (Model model) {
+            model.addAttribute("movies", getMovies(API_URL));
             return "now-playing";
     }
 
